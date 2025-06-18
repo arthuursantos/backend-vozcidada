@@ -1,5 +1,6 @@
 package com.fiec.voz_cidada.controller;
 
+import com.amazonaws.services.s3.model.*;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -10,10 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 
@@ -45,6 +42,27 @@ public class ChamadoUploadController {
     public ResponseEntity<Resource> getImage(@PathVariable String filename) {
         // Hardcoding bucket name as it was in the original SDK v2 version
         final String bucketName = "vozcidadafiec";
+
+
+        System.out.println(bucketName);
+
+        try {
+
+
+
+            ListObjectsV2Request req = new ListObjectsV2Request()
+                    .withBucketName(bucketName);
+
+            ListObjectsV2Result resp = s3Client.listObjectsV2(req);
+
+            for (S3ObjectSummary object : resp.getObjectSummaries()) {
+                System.out.println("Nome do objeto: " + object.getKey());
+                System.out.println("Tamanho do objeto: " + object.getSize());
+            }
+        } catch (Exception e){
+            System.out.println(e);
+        }
+
 
         try {
             // GetObjectRequest da v2 é substituído pelo método getObject direto da v1

@@ -1,7 +1,7 @@
 cors:
-  originPatterns: https://localhost:8080,http://localhost:5173
+  originPatterns: "*"
 server:
-  port: 8080
+  port: 5000
 
 # Spring
 spring:
@@ -9,9 +9,9 @@ spring:
     name: "Voz Cidada API"
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/voz-cidada
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/voz-cidada
     username: postgres
-    password: admin
+    password: ${POSTGRES_PASSWORD:admin}
   jpa:
     hibernate:
       ddl-auto: none
@@ -41,7 +41,7 @@ security:
 # AWS S3 Configuration
 aws:
   s3:
-    access-key: ${AWS_ACCESS_KEY_ID}
-    secret-key: ${AWS_SECRET_ACCESS_KEY}
-    region: ${AWS_REGION}
-    bucket-name: ${AWS_BUCKET_NAME}
+    access-key: ${AWS_ACCESS_KEY_ID:AKIAUNKCFIQ7LW6KITM5}
+    secret-key: ${AWS_SECRET_ACCESS_KEY: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}
+    region: ${AWS_REGION:us-east-1}
+    bucket-name: ${AWS_BUCKET_NAME:vozcidadafiec}

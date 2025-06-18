@@ -1,0 +1,11 @@
+.mvn
+target
+target/
+target/*
+target/**
+.idea
+logs
+logs/
+logs/*
+logs/**
+firebase_pre.json
