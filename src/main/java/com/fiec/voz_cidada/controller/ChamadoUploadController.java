@@ -129,7 +129,7 @@ public class ChamadoUploadController {
             PutObjectResult putObjectResult = s3Client.putObject(bucketName, filename, image.getInputStream(), metadata);
 
             // Retorna o nome do arquivo após o upload bem-sucedido
-            return filename;
+            return s3Client.getUrl(bucketName, filename).toString();
 
         } catch (AmazonServiceException e) {
             // Captura exceções específicas do serviço AWS (S3, etc.)
