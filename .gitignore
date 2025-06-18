@@ -9,3 +9,5 @@ logs/
 logs/*
 logs/**
 firebase_pre.json
+mvnw
+mvnw.cmd
