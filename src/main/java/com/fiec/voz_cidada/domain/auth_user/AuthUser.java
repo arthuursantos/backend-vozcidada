@@ -57,7 +57,6 @@ public class AuthUser implements UserDetails {
         this.authStatus = AuthStatus.valueOf(authStatus.toUpperCase());
     }
 
-
     public void setFcmToken(String fcmToken) {
         this.fcmToken = fcmToken;
     }

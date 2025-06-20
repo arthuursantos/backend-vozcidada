@@ -4,6 +4,7 @@ import com.fiec.voz_cidada.controller.UsuarioController;
 import com.fiec.voz_cidada.domain.auth_user.AuthUser;
 import com.fiec.voz_cidada.domain.usuario.UsuarioDTO;
 import com.fiec.voz_cidada.domain.usuario.Usuario;
+import com.fiec.voz_cidada.exceptions.InvalidAuthenticationException;
 import com.fiec.voz_cidada.exceptions.ResourceNotFoundException;
 import com.fiec.voz_cidada.repository.AuthRepository;
 import com.fiec.voz_cidada.repository.UsuarioRepository;
@@ -54,7 +55,8 @@ public class UsuarioService extends GenericService<Usuario, UsuarioDTO, Long> {
     @Transactional
     public ResponseEntity<EntityModel<UsuarioDTO>> findByAuthUserId(Long authUserId) {
         try {
-            var entity = usuarioRepository.findByAuthUser_Id(authUserId);
+            var entity = usuarioRepository.findByAuthUser_Id(authUserId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado."));
             var dto = convertToDto(entity);
             return ResponseEntity.ok(EntityModel.of(dto, generateLinks(dto)));
         } catch (Exception e) {

@@ -7,6 +7,7 @@ import com.fiec.voz_cidada.domain.funcionario.FuncionarioDTO;
 import com.fiec.voz_cidada.domain.funcionario.Funcionario;
 import com.fiec.voz_cidada.domain.usuario.Usuario;
 import com.fiec.voz_cidada.domain.usuario.UsuarioDTO;
+import com.fiec.voz_cidada.exceptions.InvalidAuthenticationException;
 import com.fiec.voz_cidada.exceptions.ResourceNotFoundException;
 import com.fiec.voz_cidada.exceptions.UnauthorizedException;
 import com.fiec.voz_cidada.repository.AuthRepository;
@@ -66,7 +67,8 @@ public class FuncionarioService extends GenericService<Funcionario, FuncionarioD
 
     public EntityModel<FuncionarioDTO> findByAuthUserId(Long authUserId) {
         try {
-            var entity = repository.findByAuthUser_Id(authUserId);
+            var entity = repository.findByAuthUser_Id(authUserId)
+                    .orElseThrow(() -> new InvalidAuthenticationException("Usuário não encontrado."));
             var dto = convertToDto(entity);
             return EntityModel.of(dto, generateLinks(dto));
         } catch (Exception e) {

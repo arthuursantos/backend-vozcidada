@@ -49,6 +49,12 @@ public class ChamadoService extends GenericService<Chamado, ChamadoDTO, Long> {
         checkAccess(dto.getUsuarioId());
         Chamado entity = convertToEntity(dto);
 
+        if (dto.getAuthUserId() == null) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            AuthUser currentAuthUser = (AuthUser) authentication.getPrincipal();
+            dto.setAuthUserId(currentAuthUser.getId());
+        }
+
         if (dto.getAuthUserId() != null) {
             AuthUser authUser = authRepository.findById(dto.getAuthUserId())
                     .orElseThrow(() -> new ResourceNotFoundException("Usuário não autenticado."));
@@ -126,7 +132,8 @@ public class ChamadoService extends GenericService<Chamado, ChamadoDTO, Long> {
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AuthUser currentAuthUser = (AuthUser) authentication.getPrincipal();
-        Funcionario entity = funcionarioRepository.findByAuthUser_Id(currentAuthUser.getId());
+        Funcionario entity = funcionarioRepository.findByAuthUser_Id(currentAuthUser.getId())
+                .orElseThrow(() -> new RuntimeException("Nenhum funcionario encontrado."));
         if (Secretaria.valueOf(dto.getSecretaria()) != entity.getSecretaria() && entity.getSecretaria() != Secretaria.ALL) {
             throw new UnauthorizedException("Você não tem permissão para atualizar um recurso nessa secretaria.");
         }
